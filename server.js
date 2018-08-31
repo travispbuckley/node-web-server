@@ -1,5 +1,6 @@
 const express = require('express');
 const hbs = require('hbs');
+const fs = require('fs');
 
 var app = express();
 
@@ -11,6 +12,26 @@ var app = express();
 // Middleware allows you to use express for different desired functionality.
 hbs.registerPartials(__dirname + '/views/partials');
 app.set('view engine', 'hbs');
+
+// app.use is how you setup middleware
+app.use((req, res, next) => {
+    var now = new Date().toString();
+    var log = `${now}: ${req.method} ${req.url}`;
+
+    fs.appendFile('server.log', log + '\n', (err) => {
+        if (err) {
+            console.log('Unable to append to server.log');
+        }
+    });
+    console.log(log);
+    next();
+});
+
+app.use((req, res, next) => {
+    res.render('maintenance.hbs');
+    next();
+});
+
 app.use(express.static(__dirname + '/public'));
 
 // sets a function up to be used wherever it is called within HBS files.
