@@ -2,6 +2,7 @@ const express = require('express');
 const hbs = require('hbs');
 const fs = require('fs');
 
+const port = process.env.PORT || 3000;
 var app = express();
 
 // setup http route handlers. send http data/html page
@@ -66,6 +67,6 @@ app.get('/bad', (req, res) => {
 
 // binds application to port on machine. Can take a second parameter
 // a function to do something once server is up.
-app.listen(3000, () => {
-    console.log('server is up on port 3000');
+app.listen(port, () => {
+    console.log('server is up on port ' + port);
 });
